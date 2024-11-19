@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace App\Entity\Fees\Association;
 
 use App\Entity\Fees\FeeInterface;
+use App\Enum\VehicleTypeEnum;
 use Money\Money;
 
 class Association implements FeeInterface
 {
-    public function calculate(Money $price, string $type): Money
+    public function calculate(Money $price, VehicleTypeEnum $type): Money
     {
         $fee = Money::CAD(0);
 

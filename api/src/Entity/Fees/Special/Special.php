@@ -4,22 +4,20 @@ declare(strict_types=1);
 
 namespace App\Entity\Fees\Special;
 
+use App\Entity\Fees\FeeByTypeCalculatorTrait;
 use App\Entity\Fees\FeeInterface;
+use App\Enum\VehicleTypeEnum;
 use Money\Money;
 
 class Special implements FeeInterface
 {
-    public function calculate(Money $price, string $type): Money
+    use FeeByTypeCalculatorTrait;
+
+    public function calculate(Money $price, VehicleTypeEnum $type): Money
     {
         $fee = Money::CAD(0);
 
-        $className = __CLASS__ . ucfirst($type);
-        if (class_exists($className)) {
-            $feeCalculator = new $className();
-            $fee = $feeCalculator->calculate($price);
-        }
-
-        return $fee;
+        return $this->calculateByType($fee, $type);
     }
 
     public function getName(): string

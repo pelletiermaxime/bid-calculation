@@ -8,6 +8,7 @@ use App\Entity\Fees\Association\Association;
 use App\Entity\Fees\Basic\Basic;
 use App\Entity\Fees\Special\Special;
 use App\Entity\Fees\Storage\Storage;
+use App\Enum\VehicleTypeEnum;
 use Money\Currencies\ISOCurrencies;
 use Money\Formatter\IntlMoneyFormatter;
 use Money\Money;
@@ -17,10 +18,11 @@ class Vehicle
 {
     private Money $totalPrice;
     private array $fees = [];
+    private IntlMoneyFormatter $moneyFormatter;
 
     public function __construct(
         private Money $basePrice,
-        private string $type
+        private VehicleTypeEnum $type
     ) {
         $currencies = new ISOCurrencies();
 
@@ -29,7 +31,7 @@ class Vehicle
         $this->totalPrice = $basePrice;
     }
 
-    public function calculatePrice()
+    public function calculatePrice(): void
     {
         $fees = [
             new Basic(),

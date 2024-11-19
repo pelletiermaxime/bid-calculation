@@ -67,5 +67,8 @@
             "allow-contrib": false,
             "require": "7.1.*"
         }
+    },
+    "require-dev": {
+        "fly-apps/dockerfile-laravel": "^1.0"
     }
 }

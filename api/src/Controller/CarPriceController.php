@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Vehicle;
+use App\Enum\VehicleTypeEnum;
 use InvalidArgumentException;
 use Money\Money;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use ValueError;
 
 class CarPriceController extends AbstractController
 {
@@ -27,14 +29,14 @@ class CarPriceController extends AbstractController
             return $this->json(['error' => 'Invalid price'], 400, ['Access-Control-Allow-Origin' => '*']);
         }
 
-        $vehicle = new Vehicle($basePrice, $type);
-        $vehicle->calculatePrice();
+        try {
+            $typeEnum = VehicleTypeEnum::from($type);
+        } catch (ValueError $e) {
+            return $this->json(['error' => 'Invalid type'], 400, ['Access-Control-Allow-Origin' => '*']);
+        }
 
-        $basicFee = Money::CAD(3980);
-        $specialFee = Money::CAD(796);
-        $associationFee = Money::CAD(500);
-        $storageFee = Money::CAD(10000);
-        $totalPrice = $basePrice->add($basicFee)->add($specialFee)->add($associationFee)->add($storageFee);
+        $vehicle = new Vehicle($basePrice, $typeEnum);
+        $vehicle->calculatePrice();
 
         return $this->json([
             $vehicle->toJson(),
