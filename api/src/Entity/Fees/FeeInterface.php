@@ -10,5 +10,6 @@ use Money\Money;
 interface FeeInterface
 {
     public function calculate(Money $price, VehicleTypeEnum $type): Money;
+
     public function getName(): string;
 }

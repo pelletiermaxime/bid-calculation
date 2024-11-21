@@ -6,11 +6,11 @@ namespace App\Controller;
 
 use App\Entity\Vehicle;
 use App\Enum\VehicleTypeEnum;
-use InvalidArgumentException;
 use Money\Money;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use InvalidArgumentException;
 use ValueError;
 
 class CarPriceController extends AbstractController

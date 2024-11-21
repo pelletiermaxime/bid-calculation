@@ -16,11 +16,11 @@ class Association implements FeeInterface
 
         if ($price->greaterThan(Money::CAD(100)) && $price->lessThan(Money::CAD(50000))) {
             $fee = Money::CAD(500);
-        } else if ($price->greaterThan(Money::CAD(50000)) && $price->lessThan(Money::CAD(100000))) {
+        } elseif ($price->greaterThan(Money::CAD(50000)) && $price->lessThan(Money::CAD(100000))) {
             $fee = Money::CAD(1000);
-        } else if ($price->greaterThan(Money::CAD(100000)) && $price->lessThan(Money::CAD(300000))) {
+        } elseif ($price->greaterThan(Money::CAD(100000)) && $price->lessThan(Money::CAD(300000))) {
             $fee = Money::CAD(1500);
-        } else if ($price->greaterThan(Money::CAD(300000))) {
+        } elseif ($price->greaterThan(Money::CAD(300000))) {
             $fee = Money::CAD(2000);
         }
 

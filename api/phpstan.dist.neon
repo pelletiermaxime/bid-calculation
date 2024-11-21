@@ -1,0 +1,10 @@
+parameters:
+    level: 5
+    checkNullables: true
+    checkUnionTypes: true
+    paths:
+        - bin/
+        - config/
+        - public/
+        - src/
+        - tests/

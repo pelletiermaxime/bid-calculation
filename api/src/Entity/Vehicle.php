@@ -22,7 +22,7 @@ class Vehicle
 
     public function __construct(
         private Money $basePrice,
-        private VehicleTypeEnum $type
+        private VehicleTypeEnum $type,
     ) {
         $currencies = new ISOCurrencies();
 

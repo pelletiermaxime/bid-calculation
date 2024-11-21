@@ -13,6 +13,7 @@ trait FeeByTypeCalculatorTrait
     {
         $className = __CLASS__ . ucfirst($type->value);
         if (class_exists($className)) {
+            /** @var FeeTypeInterface $feeCalculator */
             $feeCalculator = new $className();
             $fee = $feeCalculator->calculate($fee);
         }

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Entity\Fees\Basic;
 
+use App\Entity\Fees\FeeTypeInterface;
 use Money\Money;
 
-class BasicCommon
+class BasicCommon implements FeeTypeInterface
 {
     public function calculate(Money $fee): Money
     {
