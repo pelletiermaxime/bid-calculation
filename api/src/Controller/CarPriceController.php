@@ -38,8 +38,10 @@ class CarPriceController extends AbstractController
         $vehicle = new Vehicle($basePrice, $typeEnum);
         $vehicle->calculatePrice();
 
-        return $this->json([
+        return $this->json(
             $vehicle->toJson(),
-        ], 200, ['Access-Control-Allow-Origin' => '*']);
+            200,
+            ['Access-Control-Allow-Origin' => '*']
+        );
     }
 }

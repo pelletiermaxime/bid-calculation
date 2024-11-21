@@ -15,9 +15,7 @@ class Special implements FeeInterface
 
     public function calculate(Money $price, VehicleTypeEnum $type): Money
     {
-        $fee = Money::CAD(0);
-
-        return $this->calculateByType($fee, $type);
+        return $this->calculateByType($price, $type);
     }
 
     public function getName(): string
