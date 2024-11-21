@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useQuery } from '@tanstack/vue-query'
+import debounce from 'lodash.debounce'
 
 import type { CarPrice } from './types'
 import { ref, watch } from 'vue'
@@ -7,19 +8,21 @@ import { ref, watch } from 'vue'
 const type = ref('common')
 const price = ref(0)
 
-const fetcher = async (): Promise<CarPrice[]> =>
+const fetcher = async (): Promise<CarPrice> =>
   await fetch(
     `http://127.0.0.1:8000/api/calculate-car-price/${price.value * 100}/${type.value}`,
   ).then((response) => response.json())
 
-const { isLoading, isError, data, error, refetch } = useQuery<CarPrice[]>({
+const { isLoading, isError, data, error, refetch } = useQuery<CarPrice>({
   queryKey: ['todos'],
   queryFn: fetcher,
   enabled: false,
 })
 
+const debouncedRefetch = debounce(refetch, 300)
+
 watch([price, type], () => {
-  refetch()
+  debouncedRefetch()
 })
 </script>
 
@@ -36,18 +39,20 @@ watch([price, type], () => {
         option(value="luxury") Luxury
     .data-display(v-if="data")
       h2 Calculated Prices
-      .price-item(v-for="(item, index) in data" :key="index")
+      .price-item
         p
           strong Base Price:
-          |  {{ item.base_price }}
+          | &nbsp;
+          span(data-cy="base") {{ data.base_price }}
         .fees
           p
             strong Fees:
           ul
-            li(v-for="(fee, key) in item.fees" :key="key") {{ key }}: {{ fee }}
+            li(v-for="(fee, key) in data.fees" :key="key") {{ key }}: {{ fee }}
         p
           strong Total Price:
-          |  {{ item.total_price }}
+          | &nbsp;
+          span(data-cy="total") {{ data.total_price }}
     div(v-if="isLoading") Loading...
     div(v-if="isError") Error: {{ error.message }}
 </template>
