@@ -10,7 +10,7 @@ const price = ref(0)
 
 const fetcher = async (): Promise<CarPrice> =>
   await fetch(
-    `http://127.0.0.1:8000/api/calculate-car-price/${price.value * 100}/${type.value}`,
+    `${import.meta.env.VITE_API_URL}/calculate-car-price/${price.value * 100}/${type.value}`,
   ).then((response) => response.json())
 
 const { isLoading, isError, data, error, refetch } = useQuery<CarPrice>({
