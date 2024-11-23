@@ -17,8 +17,18 @@ services:
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'
-            - '../src/Entity/'
             - '../src/Kernel.php'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\Entity\Vehicle:
+        arguments:
+            $moneyFormatter: '@App\Service\IntlMoneyFormatterFactory'
+            $fees: '@App\Service\FeesFactory'
+
+    App\Service\IntlMoneyFormatterFactory:
+        factory: [ 'App\Service\IntlMoneyFormatterFactory', 'create' ]
+
+    App\Service\FeesFactory:
+        factory: [ 'App\Service\FeesFactory', 'create' ]

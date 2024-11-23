@@ -4,45 +4,33 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Entity\Fees\Association\Association;
-use App\Entity\Fees\Basic\Basic;
-use App\Entity\Fees\Special\Special;
-use App\Entity\Fees\Storage\Storage;
+use App\Entity\Fees\FeeInterface;
 use App\Enum\VehicleTypeEnum;
-use Money\Currencies\ISOCurrencies;
 use Money\Formatter\IntlMoneyFormatter;
 use Money\Money;
-use NumberFormatter;
 
 class Vehicle
 {
     private Money $totalPrice;
-    private array $fees = [];
-    private IntlMoneyFormatter $moneyFormatter;
+    private array $calculatedFees = [];
+    private Money $basePrice;
+    private VehicleTypeEnum $type;
 
-    public function __construct(
-        private Money $basePrice,
-        private VehicleTypeEnum $type,
-    ) {
-        $currencies = new ISOCurrencies();
-
-        $numberFormatter = new NumberFormatter('fr_CA', NumberFormatter::CURRENCY);
-        $this->moneyFormatter = new IntlMoneyFormatter($numberFormatter, $currencies);
-        $this->totalPrice = $basePrice;
+    /**
+     * @param array<FeeInterface> $fees
+     */
+    public function __construct(private readonly IntlMoneyFormatter $moneyFormatter, private readonly array $fees)
+    {
+        $this->totalPrice = Money::CAD(0);
     }
 
     public function calculatePrice(): void
     {
-        $fees = [
-            new Basic(),
-            new Special(),
-            new Association(),
-            new Storage(),
-        ];
+        $this->totalPrice = $this->basePrice;
 
-        foreach ($fees as $fee) {
+        foreach ($this->fees as $fee) {
             $feePrice = $fee->calculate($this->basePrice, $this->type);
-            $this->fees[$fee->getName()] = $this->moneyFormatter->format($feePrice);
+            $this->calculatedFees[$fee->getName()] = $this->moneyFormatter->format($feePrice);
             $this->totalPrice = $this->totalPrice->add($feePrice);
         }
     }
@@ -51,8 +39,18 @@ class Vehicle
     {
         return [
             'base_price' => $this->moneyFormatter->format($this->basePrice),
-            'fees' => $this->fees,
+            'fees' => $this->calculatedFees,
             'total_price' => $this->moneyFormatter->format($this->totalPrice),
         ];
+    }
+
+    public function setBasePrice(Money $basePrice): void
+    {
+        $this->basePrice = $basePrice;
+    }
+
+    public function setType(VehicleTypeEnum $type): void
+    {
+        $this->type = $type;
     }
 }

@@ -15,6 +15,8 @@ use ValueError;
 
 class CarPriceController extends AbstractController
 {
+    public function __construct(private readonly Vehicle $vehicle) {}
+
     /**
      * Calculate the total car price of a vehicle.
      *
@@ -35,11 +37,12 @@ class CarPriceController extends AbstractController
             return $this->json(['error' => 'Invalid type'], 400, ['Access-Control-Allow-Origin' => '*']);
         }
 
-        $vehicle = new Vehicle($basePrice, $typeEnum);
-        $vehicle->calculatePrice();
+        $this->vehicle->setBasePrice($basePrice);
+        $this->vehicle->setType($typeEnum);
+        $this->vehicle->calculatePrice();
 
         return $this->json(
-            $vehicle->toJson(),
+            $this->vehicle->toJson(),
             200,
             ['Access-Control-Allow-Origin' => '*']
         );
