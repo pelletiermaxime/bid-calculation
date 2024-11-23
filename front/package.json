@@ -24,6 +24,7 @@
     "@biomejs/biome": "^1.9.4",
     "@tsconfig/node22": "^22.0.0",
     "@types/jsdom": "^21.1.7",
+    "@types/lodash.debounce": "^4.0.9",
     "@types/node": "^22.9.0",
     "@vitejs/plugin-vue": "^5.1.4",
     "@vue/language-plugin-pug": "^2.1.10",
